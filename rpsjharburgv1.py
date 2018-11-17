@@ -15,7 +15,7 @@ class Player:
         return rock
 
 
-    def learn(self, my_move, computer_move):
+    def learn(self, my_move):
         pass
 
 
@@ -46,11 +46,20 @@ class MimicComputer(Player):
 
     def move(self):
         return self.playerlastmove
+class CycleComputer(Player):
+    def __init__(self):
+        self.computerlastmove = moves
+        self.index = 0
 
+    def move(self):
+        self.index += 1
+        if self.index == 3:
+            self.index = 0
+        return self.computerlastmove[self.index]
 class Game:
     def __init__(self, p1, p2):
         self.p1 = HumanPlayer()
-        self.p2 = MimicComputer()
+        self.p2 = CycleComputer()
         self.scorep1 = 0
         self.scorep2 = 0
 
