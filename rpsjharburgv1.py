@@ -10,11 +10,12 @@ in this game"""
 import random
 
 class Player:
+
     def move(self):
         return rock
 
 
-    def learn(self, my_move, their_move):
+    def learn(self, my_move, computer_move):
         pass
 
 
@@ -36,16 +37,27 @@ class HumanPlayer(Player):
             return invalidmove
         else:
             return humanmove
+class MimicComputer(Player):
+    def __init__(self):
+        self.playerlastmove = 'rock'
+
+    def learn(self, my_move):
+        self.playerlastmove = my_move
+
+    def move(self):
+        return self.playerlastmove
 
 class Game:
     def __init__(self, p1, p2):
         self.p1 = HumanPlayer()
-        self.p2 = RandomPlayer()
+        self.p2 = MimicComputer()
         self.scorep1 = 0
         self.scorep2 = 0
+
     def play_round(self):
         move1 = self.p1.move()
         move2 = self.p2.move()
+        self.p2.learn(move1)
 
         if move1 == "Im sorry thats not a valid move please try again.":
             print (move1)
@@ -98,8 +110,7 @@ class Game:
                 return print(f'Player 2 wins! Player 1 has {self.scorep1} points. Player 2 has {self.scorep2} points.')
 
 
-        self.p1.learn(move1, move2)
-        self.p2.learn(move2, move1)
+
 
     def play_game(self):
         print("Game start!")
