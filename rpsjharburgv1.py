@@ -39,7 +39,7 @@ class MimicComputer(Player):
         return self.playerlastmove
 
 
-class CycleComputer(Player):
+class Cycle(Player):
     def __init__(self):
         self.computerlastmove = moves
         self.index = 0
@@ -54,7 +54,7 @@ class CycleComputer(Player):
 class Game:
     def __init__(self, p1, p2):
         self.p1 = HumanPlayer()
-        self.p2 = CycleComputer()
+        self.p2 = random.choice([Cycle(), MimicComputer(), RandomPlayer()])
         self.scorep1 = 0
         self.scorep2 = 0
 
@@ -120,7 +120,7 @@ class Game:
 
     def play_game(self):
         print("Game start!")
-        for round in range(3):
+        for round in range(5):
             print(f"Round {round}:")
             self.play_round()
         if self.scorep1 > self.scorep2:   # If player 1 wins
