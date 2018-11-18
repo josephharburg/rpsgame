@@ -19,14 +19,29 @@ class RandomPlayer(Player):
 
 
 class HumanPlayer(Player):
-    def move(self):
-        humanmove = input("What is your move?:")
-        invalidmove = "Im sorry thats not a valid move please try again."
-        if humanmove not in moves:
-            return invalidmove
-        else:
-            return humanmove
+    def printerror(self, color):
+        print("\033[91m {}\033[00m" .format(color))
 
+    def move(self):
+        validmove = False
+        while validmove == False:
+            humanmove = input("What is your move?:").lower()
+            if humanmove in moves:
+                validmove = True
+                return humanmove
+            else:
+                self.printerror("Im sorry thats not a valid move please try again.")
+
+    def Numberofrounds(self):
+        isint = False
+        while isint == False:
+            self.whatnumber = input("How Many rounds do you want to play?:")
+            try:
+                self.rounds = int(self.whatnumber)
+                isint= True
+                return self.rounds
+            except ValueError:
+                self.printerror("Im sorry that is not a number!")
 
 class MimicComputer(Player):
     def __init__(self):
@@ -45,20 +60,23 @@ class Cycle(Player):
         self.index = 0
 
     def move(self):
-        self.index += 1
-        if self.index == 3:
+        if self.index <= 1:
+            self.index += 1
+            return self.computerlastmove[self.index]
+        else:
             self.index = 0
-        return self.computerlastmove[self.index]
+            return self.computerlastmove[0]
 
 
 class Game:
     def __init__(self, p1, p2):
         self.p1 = HumanPlayer()
-        self.p2 = random.choice([Cycle(), MimicComputer(), RandomPlayer()])
+        self.p2 = Cycle()
         self.scorep1 = 0
         self.scorep2 = 0
 
     def play_round(self):
+
         move1 = self.p1.move()
         move2 = self.p2.move()
         Tie = "This round is a Tie!"
@@ -68,11 +86,7 @@ class Game:
         s2 = '\nPlayer 2:'
         self.p2.learn(move1)
 
-        if move1 == "Im sorry thats not a valid move please try again.":
-            print(move1)
-        while move1 == "Im sorry thats not a valid move please try again.":
-            move1 = self.p1.move()
-            print("Im sorry thats not a valid move please try again.")
+
         if move1 == 'rock':
             print(f"Player 1: {move1}  Player 2: {move2}")
             if move1 == move2:     # if the moves are the same
@@ -120,7 +134,7 @@ class Game:
 
     def play_game(self):
         print("Game start!")
-        for round in range(5):
+        for round in range(self.p1.Numberofrounds()):
             print(f"Round {round}:")
             self.play_round()
         if self.scorep1 > self.scorep2:   # If player 1 wins
