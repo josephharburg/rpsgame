@@ -4,12 +4,25 @@ moves = ['rock', 'paper', 'scissors']
 
 
 class Player:
+    def printerror(self, color):
+        print("\033[91m {}\033[00m" .format(color))
 
     def move(self):
         return rock
 
     def learn(self, my_move):
         pass
+
+    def Numberofrounds(self):
+        isint = False
+        while isint is False:
+            self.whatnumber = input("How Many rounds do you want to play?:")
+            try:
+                self.rounds = int(self.whatnumber)
+                isint = True
+                return self.rounds
+            except ValueError:
+                self.printerror("Im sorry that is not a number!")
 
 
 class RandomPlayer(Player):
@@ -19,29 +32,17 @@ class RandomPlayer(Player):
 
 
 class HumanPlayer(Player):
-    def printerror(self, color):
-        print("\033[91m {}\033[00m" .format(color))
 
     def move(self):
         validmove = False
-        while validmove == False:
+        while validmove is False:
             humanmove = input("What is your move?:").lower()
             if humanmove in moves:
                 validmove = True
                 return humanmove
             else:
-                self.printerror("Im sorry thats not a valid move please try again.")
+                self.printerror("Thats not a valid move please try again.")
 
-    def Numberofrounds(self):
-        isint = False
-        while isint == False:
-            self.whatnumber = input("How Many rounds do you want to play?:")
-            try:
-                self.rounds = int(self.whatnumber)
-                isint= True
-                return self.rounds
-            except ValueError:
-                self.printerror("Im sorry that is not a number!")
 
 class MimicComputer(Player):
     def __init__(self):
@@ -71,7 +72,7 @@ class Cycle(Player):
 class Game:
     def __init__(self, p1, p2):
         self.p1 = HumanPlayer()
-        self.p2 = Cycle()
+        self.p2 = random.choice([RandomPlayer(), MimicComputer(), Cycle()])
         self.scorep1 = 0
         self.scorep2 = 0
 
@@ -85,8 +86,7 @@ class Game:
         s1 = '\nScore:\nPlayer 1:'
         s2 = '\nPlayer 2:'
         self.p2.learn(move1)
-
-
+        self.p1.learn(move2)
         if move1 == 'rock':
             print(f"Player 1: {move1}  Player 2: {move2}")
             if move1 == move2:     # if the moves are the same
@@ -138,11 +138,11 @@ class Game:
             print(f"Round {round}:")
             self.play_round()
         if self.scorep1 > self.scorep2:   # If player 1 wins
-            print(f"Game over! Player 1 Wins!")
+            print('\33[94m' + 'Game over! Player 1 Wins!' + '\033[0m')
         if self.scorep2 > self.scorep1:   # If player 2 wins
-            print(f"Game over! Player 2 Wins!")
+            print('\33[94m' + 'Game over! Player 2 Wins!' + '\033[0m')
         if self.scorep1 == self.scorep2:   # If its a tie
-            print(f"Game over! The game is a Tie!")
+            print('\33[94m' + 'Game over! The game is a Tie!' + '\033[0m')
 
 
 if __name__ == '__main__':
